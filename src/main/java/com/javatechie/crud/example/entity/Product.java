@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -18,8 +20,8 @@ public class Product {
 
     @Id
     @GeneratedValue
-    private int id;
+    private UUID id;
     private String name;
-    private int quantity;
-    private double price;
+    private Integer quantity;
+    private BigDecimal price;
 }
