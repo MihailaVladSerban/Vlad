@@ -2,6 +2,7 @@ package com.javatechie.crud.example.controller;
 
 import com.javatechie.crud.example.entity.Product;
 import com.javatechie.crud.example.service.ProductServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

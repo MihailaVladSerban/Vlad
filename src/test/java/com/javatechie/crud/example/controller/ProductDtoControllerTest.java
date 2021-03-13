@@ -1,8 +1,7 @@
-package guru.springframework.msscbrewery.web.controller;
+package com.javatechie.crud.example.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javatechie.crud.example.controller.ProductController;
-import com.javatechie.crud.example.model.Product;
+import com.javatechie.crud.example.model.ProductDto;
 import com.javatechie.crud.example.service.ProductServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ProductController.class)
-class ProductControllerTest {
+class ProductDtoControllerTest {
 
     @MockBean
     ProductServiceImpl productServiceImpl;
@@ -37,11 +36,11 @@ class ProductControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    Product validProduct;
+    ProductDto validProductDto;
 
     @Before
     public void setUp() {
-        validProduct = Product.builder().id(UUID.randomUUID())
+        validProductDto = ProductDto.builder().id(UUID.randomUUID())
                 .name("Ovidiu")
                 .quantity(10)
                 .price(new BigDecimal("10.15"))
@@ -50,21 +49,21 @@ class ProductControllerTest {
 
     @Test
     public void getBeer() throws Exception {
-        given(productServiceImpl.getProductById(any(UUID.class))).willReturn(validProduct);
+        given(productServiceImpl.getProductById(any(UUID.class))).willReturn(validProductDto);
 
-        mockMvc.perform(get("/api/v1/product/" + validProduct.getId().toString()).accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/product/" + validProductDto.getId().toString()).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(validProduct.getId().toString())))
+                .andExpect(jsonPath("$.id", is(validProductDto.getId().toString())))
                 .andExpect(jsonPath("$.name", is("Ovidiu")));
     }
 
     @Test
     public void handlePost() throws Exception {
         //given
-        Product productDto = validProduct;
+        ProductDto productDto = validProductDto;
         productDto.setId(null);
-        Product savedDto = Product.builder().id(UUID.randomUUID()).name("New Product").build();
+        ProductDto savedDto = ProductDto.builder().id(UUID.randomUUID()).name("New Product").build();
         String beerDtoJson = objectMapper.writeValueAsString(productDto);
 
         given(productServiceImpl.saveProduct(any())).willReturn(savedDto);
@@ -79,7 +78,7 @@ class ProductControllerTest {
     @Test
     public void handleUpdate() throws Exception {
         //given
-        Product productDto = validProduct;
+        ProductDto productDto = validProductDto;
         productDto.setId(null);
         String productDtoJson = objectMapper.writeValueAsString(productDto);
 
@@ -89,7 +88,7 @@ class ProductControllerTest {
                 .content(productDtoJson))
                 .andExpect(status().isNoContent());
 
-        then(productServiceImpl).should().updateProduct(any());
+        then(productServiceImpl).should().updateProduct(any(),any());
 
     }
 }
